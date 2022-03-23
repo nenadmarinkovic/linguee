@@ -1,3 +1,6 @@
+from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware import Middleware
+from fastapi import FastAPI
 import sentry_sdk
 from fastapi import FastAPI, Response, status
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
@@ -152,21 +155,13 @@ async def autocompletions(
     return result.autocompletions
 
 
-app = FastAPI()
-
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:3000",
 ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+middleware = [
+    Middleware(CORSMiddleware, allow_origins=origins)
+]
+
+app = FastAPI(middleware=middleware)
