@@ -13,7 +13,8 @@ from linguee_api.linguee_client import LingueeClient
 from linguee_api.models import Autocompletions, ParseError, SearchResult
 from linguee_api.parsers import XExtractParser
 
-sentry_sdk.init(dsn=settings.sentry_dsn, environment=settings.sentry_environment)
+sentry_sdk.init(dsn=settings.sentry_dsn,
+                environment=settings.sentry_environment)
 app = FastAPI(
     title="Linguee API",
     description=PROJECT_DESCRIPTION,
@@ -26,7 +27,8 @@ page_downloader = MemoryCache(
         cache_directory=settings.cache_directory, upstream=HTTPXDownloader()
     )
 )
-client = LingueeClient(page_downloader=page_downloader, page_parser=XExtractParser())
+client = LingueeClient(page_downloader=page_downloader,
+                       page_parser=XExtractParser())
 
 
 @app.get("/", include_in_schema=False)
@@ -157,6 +159,8 @@ origins = [
     "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
+    "http://localhost:3000",
+    "http://localhost:8000",
 ]
 
 app.add_middleware(
