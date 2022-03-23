@@ -155,13 +155,13 @@ async def autocompletions(
     return result.autocompletions
 
 
-origins = [
-    "http://localhost:8000",
-    "http://localhost:3000",
-]
+# origins = [
+#     "http://localhost:8000",
+#     "http://localhost:3000",
+# ]
 
-middleware = [
-    Middleware(CORSMiddleware, allow_origins=origins)
-]
+# middleware = [
+#     Middleware(CORSMiddleware, allow_origins=origins)
+# ]
 
-app = FastAPI(middleware=middleware)
+# app = FastAPI(middleware=middleware)
