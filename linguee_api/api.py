@@ -2,8 +2,7 @@ import sentry_sdk
 from fastapi import FastAPI, Response, status
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from starlette.responses import RedirectResponse
-from starlette.middleware import Middleware
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from linguee_api.config import settings
 from linguee_api.const import LANGUAGE_CODE, PROJECT_DESCRIPTION
@@ -150,10 +149,25 @@ async def autocompletions(
         return result
     return result.autocompletions
 
-origins = ["*"]
 
-middleware = [
-    Middleware(CORSMiddleware, allow_origins=origins)
+app = FastAPI()
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
 ]
 
-app = FastAPI(middleware=middleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+async def main():
+    return {"message": "All fine."}
