@@ -3,6 +3,25 @@ from fastapi import FastAPI, Response, status
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from starlette.responses import RedirectResponse
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 from linguee_api.config import settings
 from linguee_api.const import LANGUAGE_CODE, PROJECT_DESCRIPTION
 from linguee_api.downloaders.file_cache import FileCache

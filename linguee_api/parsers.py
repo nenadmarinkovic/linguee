@@ -1,6 +1,5 @@
 import abc
 from typing import Optional
-
 from xextract import Group, String
 
 from linguee_api.models import (
