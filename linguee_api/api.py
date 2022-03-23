@@ -147,3 +147,17 @@ async def autocompletions(
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return result
     return result.autocompletions
+
+from fastapi import FastAPI
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:3000",
+]
+
+middleware = [
+    Middleware(CORSMiddleware, allow_origins=origins)
+]
+
+app = FastAPI(middleware=middleware)

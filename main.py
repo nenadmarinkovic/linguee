@@ -30,6 +30,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 @app.get("/")
 async def main():
