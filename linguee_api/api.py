@@ -2,6 +2,8 @@ import sentry_sdk
 from fastapi import FastAPI, Response, status
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from starlette.responses import RedirectResponse
+from starlette.middleware import Middleware
+from starlette.middleware.cors import CORSMiddleware
 
 from linguee_api.config import settings
 from linguee_api.const import LANGUAGE_CODE, PROJECT_DESCRIPTION
@@ -12,7 +14,8 @@ from linguee_api.linguee_client import LingueeClient
 from linguee_api.models import Autocompletions, ParseError, SearchResult
 from linguee_api.parsers import XExtractParser
 
-sentry_sdk.init(dsn=settings.sentry_dsn, environment=settings.sentry_environment)
+sentry_sdk.init(dsn=settings.sentry_dsn,
+                environment=settings.sentry_environment)
 app = FastAPI(
     title="Linguee API",
     description=PROJECT_DESCRIPTION,
@@ -25,7 +28,20 @@ page_downloader = MemoryCache(
         cache_directory=settings.cache_directory, upstream=HTTPXDownloader()
     )
 )
-client = LingueeClient(page_downloader=page_downloader, page_parser=XExtractParser())
+client = LingueeClient(page_downloader=page_downloader,
+                       page_parser=XExtractParser())
+
+origins = [
+    "http://localhost:5000",
+    "http://localhost:3000",
+    "http://localhost:8000",
+]
+
+middleware = [
+    Middleware(CORSMiddleware, allow_origins=origins)
+]
+
+app = FastAPI(middleware=middleware)
 
 
 @app.get("/", include_in_schema=False)
